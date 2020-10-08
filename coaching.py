@@ -1,11 +1,309 @@
 import subprocess as sp
 import pymysql
 import pymysql.cursors
-from datetime import date
+from tabulate import tabulate
 
-# def calculate_age(born):
-#     today = date.today()
-#     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+def viewTable(rows):
+    a = []
+    try:
+        a.append(list(rows[0].keys()))
+    except:
+        print("\n-----------------\nEMPTY TABLE\n-----------------\n")   
+        return
+    for row in rows:
+        b = []
+        for k in row.keys():
+            b.append(row[k])
+        a.append(b)
+    print(tabulate(a, tablefmt="psql", headers="firstrow"))
+    print()
+    return
+
+def show_tables():
+    print("Choose a VIEW option\n")
+    print("1.  branch")
+    print("2.  branch_address")
+    print("3.  consists_of")
+    print("4.  course")
+    print("5.  online_lecture")
+    print("6.  reads")
+    print("7.  require")
+    print("8.  sheet")
+    print("9.  staff")
+    print("10. staff_working_hours")
+    print("11. student_family_address")
+    print("12. student_family_member_name")
+    print("13. students")
+    print("14. study_material")
+    print("15. test_score")
+    print("\n")
+    return
+
+def progress():
+    print("Hey!,here you will get the difference in scores of student for the 2 test_ids you will input\n")
+    s_id=input("Write the rollno of student: ")
+    t1_id=input("Write the test_id1: ")
+    t2_id=input("Write the test_id2: ")
+    query="SELECT t1.score - t2.score FROM test_score t1,test_score t2 WHERE t1.test_id='%s' AND t2.test_id='%s' AND t1.student_rollno='%s' AND t2.student_rollno='%s' " %(t1_id,t2_id,s_id,s_id)
+
+    try:
+        cur.execute(query)
+        rows=cur.fetchall()
+        viewTable(rows)
+        con.commit()
+
+    except Exception as e:
+        print(e)
+        print("\nInvalid data\n")
+        
+    return
+
+
+def project():
+    inp=input("Press 1 for getting top performers of a test\nPress 2 for getting above average students\n")
+    
+    if inp == '1':
+        t_id=input("Write the test_id: ")
+        k=input("Write the number of top performers you want to list out: ")
+        query="SELECT * FROM test_score WHERE test_id='%s' LIMIT %s " %(t_id,k)
+
+        try:
+            cur.execute(query)
+            rows=cur.fetchall()
+            viewTable(rows)
+            con.commit()
+
+        except Exception as e:
+            print(e)
+            print("\nInvalid data\n")
+
+    elif inp == '2':
+        query="SELECT * FROM test_score WHERE score > (SELECT AVG(score) FROM test_score)"
+
+        try:
+            cur.execute(query)
+            rows=cur.fetchall()
+            viewTable(rows)
+            con.commit()
+
+        except Exception as e:
+            print(e)
+
+    return  
+
+def view_it():
+    show_tables();
+    n = input("Enter view option: ")
+
+    if n == '1':
+        query = "SELECT * FROM branch;"
+    elif n == '2':
+        query = "SELECT * FROM branch_address;"
+    elif n == '3':
+        query = "SELECT * FROM consists_of;"
+    elif n == '4':
+        query = "SELECT * FROM course;"
+    elif n == '5':
+        query = "SELECT * FROM online_lecture;"
+    elif n == '6':
+        query = "SELECT * FROM reads;"
+    elif n == '7':
+        query = "SELECT * FROM require;"
+    elif n == '8':
+        query = "SELECT * FROM sheet;"
+    elif n == '9':
+        query = "SELECT * FROM staff;"
+    elif n == '10':
+        query = "SELECT * FROM staff_working_hours;"
+    elif n == '11':
+        query = "SELECT * FROM student_family_address;"
+    elif n == '12':
+        query = "SELECT * FROM student_family_member_name;"
+    elif n == '13':
+        query = "SELECT * FROM students;"
+    elif n == '14':
+        query = "SELECT * FROM study_material;"
+    elif n == '15':
+        query = "SELECT * FROM test_score;"
+    
+    try:
+        cur.execute(query)
+        rows=cur.fetchall()
+        viewTable(rows)
+        con.commit()
+
+    except Exception as e:
+        print(e)
+        print("\nInvalid query number\n")
+        
+    return
+
+def delete():
+    print("Choose a table in which you have to apply delete operation\n")
+    show_tables()
+    n=input("Enter table number: ")
+
+    if n == '1':
+        s=input("Enter branchcode to be deleted: ")
+        query = "DELETE FROM branch WHERE branchcode='%s';" %(s)
+    elif n == '2':
+        s=input("Enter branch_id to be deleted: ")
+        query = "DELETE FROM branch_address WHERE branch_id='%s';" %(s)
+    elif n == '3':
+        s1=input("Enter course_id to be deleted: ")
+        s2=input("Enter branchcode to be deleted: ")
+        query = "DELETE FROM consists_of WHERE branchcode='%s' AND course_id='%s';" %(s2,s1)
+    elif n == '4':
+        s=input("Enter course_id to be deleted: ")
+        query = "DELETE FROM course WHERE course_id='%s';" %(s)
+    elif n == '5':
+        s1=input("Enter topic_name to be deleted: ")
+        s2=input("Enter staff_id to be deleted: ")
+        query = "DELETE FROM online_lecture WHERE topic_name='%s' AND staff_id='%s';" %(s1,s2)
+    elif n == '6':
+        s1=input("Enter rollno to be deleted: ")
+        s2=input("Enter study_material_id to be deleted: ")
+        query = "DELETE FROM reads WHERE rollno='%s' AND study_material_id='%s';" %(s1,s2)
+    elif n == '7':
+        s1=input("Enter student_rollno to be deleted: ")
+        s2=input("Enter study_material_id to be deleted: ")
+        s3=input("Enter course_id to be deleted: ")
+        s4=input("Enter staff_id to be deleted: ")
+        query = "DELETE FROM require WHERE student_rollno='%s' AND study_material_id='%s' AND course_id='%s' AND staff_id='%s';" %(s1,s2,s3,s4)
+    elif n == '8':
+        s=input("Enter id to be deleted: ")
+        query = "DELETE FROM sheet WHERE id='%s';" %(s)
+    elif n == '9':
+        s=input("Enter staff_id to be deleted: ")
+        query = "DELETE FROM staff WHERE staff_id='%s';" %(s)
+    elif n == '10':
+        s=input("Enter shift to be deleted: ")
+        query = "DELETE FROM staff_working_hours WHERE shift='%s';" %(s)
+    elif n == '11':
+        s=input("Enter student_rollno to be deleted: ")
+        query = "DELETE FROM student_family_address WHERE student_rollno='%s';" %(s)
+    elif n == '12':
+        s1=input("Enter rollno to be deleted: ")
+        s2=input("Enter phone_no to be deleted: ")
+        query = "DELETE FROM student_family_member_name WHERE rollno='%s' AND phone_no='%s';" %(s1,s2)
+    elif n == '13':
+        s=input("Enter rollno to be deleted: ")
+        query = "DELETE FROM students WHERE rollno='%s';" %(s)
+    elif n == '14':
+        s=input("Enter id to be deleted: ")
+        query = "DELETE FROM study_material WHERE id='%s';" %(s)
+    elif n == '15':
+       s1=input("Enter student_rollno to be deleted: ")
+       s2=input("Enter test_id to be deleted: ")
+       query = "DELETE FROM test_score WHERE student_rollno='%s' AND test_id='%s';" %(s1,s2)
+
+    try:
+        cur.execute(query)
+        rows=cur.fetchall()
+        con.commit()
+
+    except Exception as e:
+        print(e)
+        print("\nInvalid data\n")
+
+    return  
+
+
+def aggregate():
+    print("Choose a option\n")
+    print("1.  MIN MARKS OF A PARTICULAR TEST")
+    print("2.  MAX MARKS OF A PARTICULAR TEST")
+    print("3.  AVERAGE MARKS FOR A PARTICULAR TEST")
+
+    n = input("Enter option: ")
+
+    if n=='1':
+        min_marks()
+    elif n=='2':
+        max_marks()
+    elif n=='3':
+        avg_marks()
+
+
+def min_marks():
+    print("Choose test_ids like: T_PHY102 , T_MATH94, T_CHEM24\n")
+
+    inp = input("Enter test id: ")
+    query="SELECT MIN(score) FROM test_score t WHERE t.test_id = '%s';" %(inp);
+    try:
+        cur.execute(query)
+        rows=cur.fetchall()
+        viewTable(rows)
+        con.commit()
+
+    except Exception as e:
+        print(e)
+        print("\nInvalid data\n")
+        
+    return
+
+
+def max_marks():
+    print("Choose test_ids like: T_PHY102 , T_MATH94, T_CHEM24\n")
+
+    inp = input("Enter test id: ")
+    query="SELECT MAX(score) FROM test_score t WHERE t.test_id = '%s';" %(inp);
+    try:
+        cur.execute(query)
+        rows=cur.fetchall()
+        viewTable(rows)
+        con.commit()
+
+    except Exception as e:
+        print(e)
+        print("\nInvalid data\n")
+        
+    return
+
+
+def avg_marks():
+    print("Choose test_ids like: T_PHY102 , T_MATH94, T_CHEM24\n")
+
+    inp = input("Enter test id: ")
+    query="SELECT AVG(score) FROM test_score t WHERE t.test_id = '%s';" %(inp);
+    try:
+        cur.execute(query)
+        rows=cur.fetchall()
+        viewTable(rows)
+        con.commit()
+
+    except Exception as e:
+        print(e)
+        print("\nInvalid data\n")
+        
+    return
+
+
+def sex_ratio():
+    query = "DROP VIEW IF EXISTS V1;" 
+    cur.execute(query)
+    query = "CREATE VIEW V1(M) AS SELECT COUNT(gender) FROM students WHERE gender='Male';"
+    cur.execute(query)
+    query = "DROP VIEW IF EXISTS V2;" 
+    cur.execute(query)
+
+    query = "CREATE VIEW V2(F) AS SELECT COUNT(gender) FROM students WHERE gender='Female';"
+    cur.execute(query)
+    query = "SELECT F/M FROM V1,V2;"
+    try:
+        cur.execute(query)
+        rows=cur.fetchall()
+        viewTable(rows)
+        con.commit()
+
+    except Exception as e:
+        print(e)
+        print("\nInvalid data\n")
+        
+    return
+
+
 def option1():
     
     print("Select something to add")
@@ -75,18 +373,6 @@ def option2():
         return
 
 
-def option3():
-    print()
-    
-
-
-def option4():
-    print()
-
-
-def option5():
-    print()
-
 def studentAdmission():
 
     try:
@@ -98,7 +384,7 @@ def studentAdmission():
         row["dob"] = input("Birth Date (YYYY-MM-DD): ")
         row["gender"] = input("Gender: (Male/Female/Others): ")
         print("Course id(format: (Exam_to_appear)_subjectID)\nFor example JEE_MATH01, MED_BIO02")
-        row["course_id"] = input("Please enter the course id for the course student is enrolled in")
+        row["course_id"] = input("Please enter the course id for the course student is enrolled in: ")
         query = "INSERT INTO students(rollno, course_id, full_name, dob, gender) VALUES('%s', '%s', '%s', '%s', '%s')" % (
             row["rollno"], row["course_id"], row["full_name"], row["dob"], row["gender"])
 
@@ -503,15 +789,22 @@ def dispatch(ch):
     """
     Function that maps helper functions to option entered
     """
-
     if(ch == 1):
-        option1();
+        option1()
     elif(ch == 2):
         option2()
     elif(ch == 3):
-        option3()
+        view_it()
     elif(ch == 4):
-        option4()
+        project()
+    elif(ch == 5):
+        progress()
+    elif(ch == 6):
+        delete()
+    elif(ch == 7):
+        aggregate()
+    elif(ch == 8):
+        sex_ratio()
     else:
         print("Error: Invalid Option")
 
@@ -520,6 +813,7 @@ def dispatch(ch):
 while(1):
     tmp = sp.call('clear', shell=True)
     
+    # Can be skipped if you want to hard core username and password
     username = input("Username: ")
     password = input("Password: ")
 
@@ -543,15 +837,18 @@ while(1):
         with con.cursor() as cur:
             while(1):
                 tmp = sp.call('clear', shell=True)
-                print("1. Add to the database") 
-                print("2. Update the database")
-                print("3. Delete an entry")
-                print("4. View")
-                print("5. Queries")
-                print("6. Logout")
+                
+                print("1. Add to the database")
+                print("2. Update the database") 
+                print("3. Have a look on our database tables")  
+                print("4. Project students based on their performance")  
+                print("5. Check Progress")  
+                print("6. Delete tuples")
+                print("7. Calculate Aggregate")
+                print("8. Sex-ratio")
                 ch = int(input("Enter choice> "))
                 tmp = sp.call('clear', shell=True)
-                if ch >= 6:
+                if ch > 8:
                     break
                 else:
                     dispatch(ch)
