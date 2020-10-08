@@ -51,38 +51,45 @@ def option1():
 
 
 def option2():
-    """
-    Function to implement option 1
-    """
-    print("Not implemented")
+    
+    print("Select something to update!")
+    print("1. Student's family's address")
+    print("2. Student's family member's phone no.")
+    print("3. Course Fee")
+    print("4. Teacher assigned to a particular course")
+    print("5. Branch address and pincode")
+    adda = int(input("Enter Choice>  "))
+    temp = sp.call('clear', shell = True)
+
+    if( adda == 1 ):
+        updateFamilyAddress();
+    if( adda == 2 ):
+        updatePhone();
+    if( adda == 3 ):
+        updateFee();
+    if( adda == 4 ):
+        updateStaff();
+    if( adda == 5 ):
+        updateBranchAddress();
+    if( adda >= 6 ):
+        return
 
 
 def option3():
-    """
-    Function to implement option 2
-    """
-    print("Not implemented")
+    print()
+    
 
 
 def option4():
-    """
-    Function to implement option 3
-    """
-    print("Not implemented")
+    print()
 
+
+def option5():
+    print()
 
 def studentAdmission():
-    """
-    This is a sample function implemented for the refrence.
-    This example is related to the Employee Database.
-    In addition to taking input, you are required to handle domain errors as well
-    For example: the SSN should be only 9 characters long
-    Sex should be only M or F
-    If you choose to take Super_SSN, you need to make sure the foreign key constraint is satisfied
-    HINT: Instead of handling all these errors yourself, you can make use of except clause to print the error returned to you by MySQL
-    """
+
     try:
-        # Takes emplyee details as input
         row = {}
         print("Enter new student's details: ")
         name = input("Full Name: ")
@@ -370,6 +377,128 @@ def addConsists():
 
     return
 
+def updateFamilyAddress():
+
+    try:
+
+        # print("Roll no of the student whose address is to be changed: ")
+        row = {}
+        row["rollno"] = input("Roll no of the student whose address is to be changed: ")
+        row["address"] = input("New address: ")
+
+        query = "UPDATE student_family_address SET address = '%s' WHERE student_rollno = '%s'" % (row["address"], row["rollno"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Database Updated")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
+
+def updatePhone():
+
+    try:
+
+        # print("Roll no of the student whose address is to be changed: ")
+        row = {}
+        row["name"] = input("Name of the family member: ")
+        row["rollno"] = input("Roll no of the related student: ")
+        row["phone"] = input("New phone no.: ")
+
+        query = "UPDATE student_family_member_name SET phone_no = '%s' WHERE (rollno = '%s' AND name = '%s')" % (row["phone"], row["rollno"], row["name"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Database Updated")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
+
+def updateFee():
+
+    try:
+
+        # print("Roll no of the student whose address is to be changed: ")
+        row = {}
+        row["Id"] = input("Course Id(eg. JEE_MATH01): ")
+        row["fee"] = input("New Fee: ")
+
+        query = "UPDATE course SET fee = '%s' WHERE course_id = '%s'" % (row["fee"], row["Id"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Database Updated")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
+
+def updateStaff():
+
+    try:
+        # print("Roll no of the student whose address is to be changed: ")
+        row = {}
+        row["Id"] = input("Course Id(eg. JEE_MATH01): ")
+        row["New"] = input("staff_id of the new teacher assigned: ")
+
+        query = "UPDATE course SET staff_id = '%s' WHERE course_id = '%s'" % (row["New"], row["Id"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Database Updated")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
+
+def updateBranchAddress():
+
+    try:
+
+        # print("Roll no of the student whose address is to be changed: ")
+        row = {}
+        row["branchcode"] = input("Branchcode: ")
+        row["New"] = input("New address of the branch: ")
+        row["new"] = input("New pincode of the branch: ")
+
+        query = "UPDATE branch SET address = '%s', pincode = '%s' WHERE branchcode = '%s'" % (row["New"], row["new"], row["branchcode"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Database Updated")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
+
+
 def dispatch(ch):
     """
     Function that maps helper functions to option entered
@@ -414,14 +543,15 @@ while(1):
         with con.cursor() as cur:
             while(1):
                 tmp = sp.call('clear', shell=True)
-                print("1. Make a change to the database")  # Hire an Employee
-                print("2. Option 2")  # Fire an Employee
-                print("3. Option 3")  # Promote Employee
-                print("4. Option 4")  # Employee Statistics
-                print("5. Logout")
+                print("1. Add to the database") 
+                print("2. Update the database")
+                print("3. Delete an entry")
+                print("4. View")
+                print("5. Queries")
+                print("6. Logout")
                 ch = int(input("Enter choice> "))
                 tmp = sp.call('clear', shell=True)
-                if ch >= 5:
+                if ch >= 6:
                     break
                 else:
                     dispatch(ch)
