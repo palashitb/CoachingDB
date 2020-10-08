@@ -13,8 +13,9 @@ def option1():
     print("2. New Branch")
     print("3. Staff(employee)")
     print("4. Online Lecture details")
+    print("5. New Course")
 
-    ad = int(input("\nEnter Choice>"))
+    ad = int(input("\nEnter Choice>  "))
     tmp = sp.call('clear', shell = True)
     if( ad == 1 ):
         studentAdmission();
@@ -24,6 +25,8 @@ def option1():
         addStaff();
     if( ad == 4 ):
         addOnlineLecture();
+    if( ad == 5 ):
+        addCourse();
 
 
 def option2():
@@ -161,6 +164,35 @@ def addOnlineLecture():
 
     return
 
+def addCourse():
+
+    try:
+
+        row = {}
+        print("Enter New Course Details")
+        row["coursename"] = input("Course name(name of the exam to appear): ")
+        row["session"] = input("Session(YYYY): ")
+        print("Course id(format: (Exam_to_appear)_subjectID)\nFor example JEE_MATH01, MED_BIO02")
+        row["course_id"] = input("Course Id: ")
+        row["staff_id"] = input("Staff Id of the teacher taking the course(First letter should be S followed by a non 0 int without preceding 0s): ")
+        row["fee"] = input("Fee(in Rs, upto 2 decimals: ")
+        # have to make a function so that we can count the no. of students in a course
+
+        query = "INSERT INTO course(course_id, staff_id, C_name, session, fee, num_of_students_enrolled) VALUES('%s', '%s', '%s', '%s', '%s', '%s')" % (
+            row["course_id"], row["staff_id"], row["coursename"], row["session"], row["fee"], '0')
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Inserted into database")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
 
 def dispatch(ch):
     """
