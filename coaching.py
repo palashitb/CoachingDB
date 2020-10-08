@@ -7,6 +7,24 @@ from datetime import date
 #     today = date.today()
 #     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 def option1():
+    
+    print("Select something to add")
+    print("1. Student")
+    print("2. New Branch")
+    print("3. Staff(employee)")
+    print("4. Online Lecture details")
+
+    ad = int(input("\nEnter Choice>"))
+    tmp = sp.call('clear', shell = True)
+    if( ad == 1 ):
+        studentAdmission();
+    if( ad == 2 ):
+        addBranch();
+    if( ad == 3 ):
+        addStaff();
+    if( ad == 4 ):
+        addOnlineLecture();
+
 
 def option2():
     """
@@ -66,6 +84,83 @@ def studentAdmission():
 
     return
 
+def addBranch():
+
+    try:
+        row = {}
+        print("Enter new branch details")
+        row["name"] = input("Name: ")
+        row["address"] = input("Address: ")
+        row["pincode"] = input("Pincode(6 digit): ")
+        row["branchcode"] = input("Branch code(First 3-4 letters of the city followed by 2digit no. like KOTA02): ")
+
+        query = "INSERT INTO branch(pincode, branchcode, name, address) VALUES('%s', '%s', '%s', '%s')" % (
+            row["pincode"], row["branchcode"], row["name"], row["address"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Inserted into database")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
+
+def addStaff():
+
+    try:
+        row = {}
+        print("Enter new Staff details")
+        row["staff_id"] = input("Staff_id(First letter should be S followed by a non 0 int without preceding 0s): ")
+        row["salary"] = input("Enter salary(correct upto 2 decimals XD): ")
+        row["branchcode"] = input("Branch code for the branch where employed(First 3-4 letters of the city followed by 2digit no. like KOTA02): ")
+        row["name"] = input("Full name of the employee: ")
+        row["working_hours"] = input("Expected working hours(no. of hours followed by 'hour' without spaces): ")
+
+        query = "INSERT INTO staff(staff_id, salary, branchcode, name, working_hours) VALUES('%s', '%s', '%s', '%s', '%s')" % (
+            row["staff_id"], row["salary"], row["branchcode"], row["name"], row["working_hours"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Inserted into database")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
+
+def addOnlineLecture():
+    try:
+
+        print("Enter Online Lecture Details")
+        row = {}
+        row["topic_name"] = input("Topic Name: ")
+        row["staff_id"] = input("Staff Id of the teacher who is tutoring the video(First letter should be S followed by a non 0 int without preceding 0s): ")
+        row["duration"] = input("Duration of the online lecture(no. of mins followed by space followed by 'min': ")
+
+        query = "INSERT INTO online_lecture(topic_name, staff_id, duration) VALUES('%s', '%s', '%s')" % (row["topic_name"], row["staff_id"], row["duration"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Inserted into database")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
+
 
 def dispatch(ch):
     """
@@ -73,7 +168,7 @@ def dispatch(ch):
     """
 
     if(ch == 1):
-        studentAdmission();
+        option1();
     elif(ch == 2):
         option2()
     elif(ch == 3):
