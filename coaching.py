@@ -17,6 +17,10 @@ def option1():
     print("6. Student family details")
     print("7. Study material given to a particular student")
     print("8. New study material")
+    print("9. Test score")
+    print("10. Requirements")
+    print("11. Consists")
+    print("12 or above for Logging out")
 
     ad = int(input("\nEnter Choice>  "))
     tmp = sp.call('clear', shell = True)
@@ -36,6 +40,14 @@ def option1():
         addReads();
     if( ad == 8 ):
         addStudyMaterial();
+    if( ad == 9 ):
+        addTestScore();
+    if( ad == 10 ):
+        addRequire();
+    if( ad == 11 ):
+        addConsists();
+    if( ad >= 12 ):
+        return
 
 
 def option2():
@@ -280,6 +292,83 @@ def addStudyMaterial():
 
     return
 
+def addTestScore():
+
+    try:
+
+        print("Enter details")
+        row = {}
+        row["student_rollno"] = input("Roll no of the student: ")
+        row["test_id"] = input("Test id(X_SUBJ00): ")
+        row["score"] = input("Score: ")
+
+        query = "INSERT INTO test_score(student_rollno, test_id, score) VALUES('%s', '%s', '%s')" % (row["student_rollno"], row["test_id"], row["score"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Inserted into database")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
+
+
+def addRequire():
+
+    try:
+
+        print("Enter details")
+        row = {}
+        row["student_rollno"] = input("Student's roll no.: ")
+        row["study_material_id"] = input("Id of the study material: ")
+        row["course_id"] = input("Id of the course: ")
+        row["staff_id"] = input("Id of the staff: ")
+
+        query = "INSERT INTO `require`(student_rollno, study_material_id, course_id, staff_id) VALUES('%s', '%s', '%s', '%s')" % (
+            row["student_rollno"], row["study_material_id"], row["course_id"], row["staff_id"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Inserted into database")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
+
+def addConsists():
+
+    try:
+        print("Enter details")
+        row = {}
+        row["course_id"] = input("Course id: ")
+        row["session"] = input("Session(YYYY): ")
+        row["pincode"] = input("Pincode: ")
+        row["branchcode"] = input("Branch code of the branch that consists the said course: ")
+
+        query = "INSERT INTO consists_of(course_id, session, pincode, branchcode) VALUES('%s', '%s', '%s', '%s')" % (row["course_id"], row["session"], row["pincode"], row["branchcode"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Inserted into database")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
 
 def dispatch(ch):
     """

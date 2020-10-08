@@ -4,24 +4,24 @@ DROP DATABASE IF EXISTS COACHING;
 CREATE SCHEMA COACHING;
 USE COACHING;
 
-DROP TABLE IF EXISTS branch_address;
-CREATE TABLE branch_address (
-  branch_id varchar(10) NOT NULL,
-  branch_Address varchar(500) NOT NULL,
-  PRIMARY KEY (branch_id)
+-- DROP TABLE IF EXISTS branch_address;
+-- CREATE TABLE branch_address (
+--   branch_id varchar(10) NOT NULL,
+--   branch_Address varchar(500) NOT NULL,
+--   PRIMARY KEY (branch_id)
   
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
-LOCK TABLES branch_address WRITE;
-INSERT INTO branch_address
-VALUES
-(
-	'KOTA_01',
-	'10-F-12, INDIRA VIHAR, KOTA'
-),(
-	'NAGPUR_02',
-	'12-K-9, Gumanpura, Nagpur'
-);
-UNLOCK TABLES;
+-- ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+-- LOCK TABLES branch_address WRITE;
+-- INSERT INTO branch_address
+-- VALUES
+-- (
+-- 	'KOTA_01',
+-- 	'10-F-12, INDIRA VIHAR, KOTA'
+-- ),(
+-- 	'NAGPUR_02',
+-- 	'12-K-9, Gumanpura, Nagpur'
+-- );
+-- UNLOCK TABLES;
 
 
 
@@ -56,7 +56,7 @@ UNLOCK TABLES;
 -- 	'2002-03-09',
 -- 	'18'
 -- );
-UNLOCK TABLES;
+-- UNLOCK TABLES;
 
 
 DROP TABLE IF EXISTS study_material;
@@ -532,28 +532,28 @@ UNLOCK TABLES;
 
 
 
-DROP TABLE IF EXISTS sheet;
-CREATE TABLE sheet (
-  id varchar(10) NOT NULL,
-  subject varchar(100) NOT NULL,
-  PRIMARY KEY (id),
+-- DROP TABLE IF EXISTS sheet;
+-- CREATE TABLE sheet (
+--   id varchar(10) NOT NULL,
+--   subject varchar(100) NOT NULL,
+--   PRIMARY KEY (id),
   
-  CONSTRAINT sheet_ibfk_1 FOREIGN KEY (id) REFERENCES study_material (id)
-  ON UPDATE CASCADE
-  ON DELETE CASCADE 
+--   CONSTRAINT sheet_ibfk_1 FOREIGN KEY (id) REFERENCES study_material (id)
+--   ON UPDATE CASCADE
+--   ON DELETE CASCADE 
 
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
-LOCK TABLES sheet WRITE;
-INSERT INTO sheet
-VALUES
-(
-	'S_PHY20',
-	'PHY'
-),(
-	'S_MATH14',
-	'MATH'
-);
-UNLOCK TABLES;
+-- ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+-- LOCK TABLES sheet WRITE;
+-- INSERT INTO sheet
+-- VALUES
+-- (
+-- 	'S_PHY20',
+-- 	'PHY'
+-- ),(
+-- 	'S_MATH14',
+-- 	'MATH'
+-- );
+-- UNLOCK TABLES;
 
 
 
