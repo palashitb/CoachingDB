@@ -4,59 +4,24 @@ DROP DATABASE IF EXISTS COACHING;
 CREATE SCHEMA COACHING;
 USE COACHING;
 
--- DROP TABLE IF EXISTS branch_address;
--- CREATE TABLE branch_address (
---   branch_id varchar(10) NOT NULL,
---   branch_Address varchar(500) NOT NULL,
---   PRIMARY KEY (branch_id)
+DROP TABLE IF EXISTS branch_address;
+CREATE TABLE branch_address (
+  branch_id varchar(10) NOT NULL,
+  branch_Address varchar(500) NOT NULL,
+  PRIMARY KEY (branch_id)
   
--- ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
--- LOCK TABLES branch_address WRITE;
--- INSERT INTO branch_address
--- VALUES
--- (
--- 	'KOTA_01',
--- 	'10-F-12, INDIRA VIHAR, KOTA'
--- ),(
--- 	'NAGPUR_02',
--- 	'12-K-9, Gumanpura, Nagpur'
--- );
--- UNLOCK TABLES;
-
-
-
-
--- DROP TABLE IF EXISTS student_age;
--- CREATE TABLE student_age (
---   dob date NOT NULL,
---   age int(3) NOT NULL,
---   PRIMARY KEY (dob)
- 
--- ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
--- LOCK TABLES student_age WRITE;
--- INSERT INTO student_age
--- VALUES
--- (
--- 	'2002-11-13',
--- 	'18'
--- ),(
--- 	'2002-10-14',
--- 	'18'
--- ),
--- (
--- 	'2001-09-01',
--- 	'19'
--- ),(
--- 	'2002-12-23',
--- 	'18'
--- ),(
--- 	'2003-07-18',
--- 	'17'
--- ),(
--- 	'2002-03-09',
--- 	'18'
--- );
--- UNLOCK TABLES;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+LOCK TABLES branch_address WRITE;
+INSERT INTO branch_address
+VALUES
+(
+	'KOTA_01',
+	'10-F-12, INDIRA VIHAR, KOTA'
+),(
+	'NAGPUR_02',
+	'12-K-9, Gumanpura, Nagpur'
+);
+UNLOCK TABLES;
 
 
 DROP TABLE IF EXISTS study_material;
@@ -88,8 +53,6 @@ VALUES
 UNLOCK TABLES;
 
 
-
-
 DROP TABLE IF EXISTS branch;
 CREATE TABLE branch (
   pincode varchar(10) NOT NULL,
@@ -113,8 +76,6 @@ VALUES
 	'12-K-9, Gumanpura, Nagpur'
 );
 UNLOCK TABLES;
-
-
 
 
 DROP TABLE IF EXISTS staff;
@@ -168,9 +129,6 @@ VALUES
 UNLOCK TABLES;
 
 
-
-
-
 DROP TABLE IF EXISTS online_lecture;
 CREATE TABLE online_lecture (
   topic_name varchar(100) NOT NULL,
@@ -180,7 +138,7 @@ CREATE TABLE online_lecture (
 
   CONSTRAINT online_lecture_ibfk_1 FOREIGN KEY (staff_id) REFERENCES staff (staff_id)
   ON UPDATE CASCADE
-  ON DELETE RESTRICT 
+  ON DELETE CASCADE 
 
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 LOCK TABLES online_lecture WRITE;
@@ -202,7 +160,6 @@ VALUES
 UNLOCK TABLES;
 
 
-
 DROP TABLE IF EXISTS course;
 CREATE TABLE course (
   course_id varchar(10) NOT NULL,
@@ -215,7 +172,7 @@ CREATE TABLE course (
   
   CONSTRAINT course_ibfk_1 FOREIGN KEY (staff_id) REFERENCES staff (staff_id)
   ON UPDATE CASCADE
-  ON DELETE RESTRICT
+  ON DELETE CASCADE
 
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 LOCK TABLES course WRITE;
@@ -263,9 +220,6 @@ VALUES
 UNLOCK TABLES;
 
 
-
-
-
 DROP TABLE IF EXISTS consists_of;
 CREATE TABLE consists_of (
   course_id varchar(10) NOT NULL,
@@ -280,7 +234,7 @@ CREATE TABLE consists_of (
 
   CONSTRAINT consists_of_ibfk_2 FOREIGN KEY (course_id) REFERENCES course (course_id)
   ON UPDATE CASCADE
-  ON DELETE RESTRICT
+  ON DELETE CASCADE
 
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 LOCK TABLES consists_of WRITE;
@@ -301,7 +255,6 @@ VALUES
 UNLOCK TABLES;
 
 
-
 DROP TABLE IF EXISTS students;
 CREATE TABLE students (
   rollno varchar(10) NOT NULL,
@@ -313,11 +266,7 @@ CREATE TABLE students (
 
   CONSTRAINT students_ibfk_1 FOREIGN KEY (course_id) REFERENCES course (course_id)
   ON UPDATE CASCADE
-  ON DELETE RESTRICT
-
-  -- CONSTRAINT students_ibfk_2 FOREIGN KEY (dob) REFERENCES student_age (dob)
-  -- ON UPDATE CASCADE
-  -- ON DELETE RESTRICT
+  ON DELETE CASCADE
 
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 LOCK TABLES students WRITE;
@@ -362,9 +311,6 @@ VALUES
 );
 UNLOCK TABLES;
 
-/*ok*/
-
-
 
 DROP TABLE IF EXISTS `reads`;
 CREATE TABLE `reads` (
@@ -394,7 +340,7 @@ VALUES
 UNLOCK TABLES;
 
 
-DROP TABLE IF EXISTS student_family_address;
+DROP TABLE IF EXISTS student_famimily_address;
 CREATE TABLE student_family_address (
   student_rollno varchar(10) NOT NULL,
   address varchar(500) NOT NULL,
@@ -441,19 +387,19 @@ CREATE TABLE `require` (
   PRIMARY KEY (student_rollno,study_material_id,course_id,staff_id),
   CONSTRAINT require_ibfk_1 FOREIGN KEY (student_rollno) REFERENCES students (rollno)
   ON UPDATE CASCADE
-  ON DELETE RESTRICT,
+  ON DELETE CASCADE,
 
   CONSTRAINT require_ibfk_2 FOREIGN KEY (study_material_id) REFERENCES study_material (id)
   ON UPDATE CASCADE
-  ON DELETE RESTRICT, 
+  ON DELETE CASCADE, 
 
   CONSTRAINT require_ibfk_3 FOREIGN KEY (staff_id) REFERENCES staff (staff_id)
   ON UPDATE CASCADE
-  ON DELETE RESTRICT,
+  ON DELETE CASCADE,
 
   CONSTRAINT require_ibfk_4 FOREIGN KEY (course_id) REFERENCES course (course_id)
   ON UPDATE CASCADE
-  ON DELETE RESTRICT
+  ON DELETE CASCADE
 
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 LOCK TABLES `require` WRITE;
@@ -478,15 +424,12 @@ VALUES
 UNLOCK TABLES;
 
 
-
-
-
 DROP TABLE IF EXISTS student_family_member_name;
 CREATE TABLE student_family_member_name (
   rollno varchar(10) NOT NULL,
   name varchar(50) NOT NULL,
   phone_no varchar(15) NOT NULL,
-  PRIMARY KEY (rollno, phone_no),
+  PRIMARY KEY (rollno,phone_no),
 
   CONSTRAINT student_family_member_name_ibfk_1 FOREIGN KEY (rollno) REFERENCES students (rollno)
   ON UPDATE CASCADE
@@ -524,38 +467,28 @@ VALUES
 UNLOCK TABLES;
 
 
-
-
-
-
-
-
-
-
--- DROP TABLE IF EXISTS sheet;
--- CREATE TABLE sheet (
---   id varchar(10) NOT NULL,
---   subject varchar(100) NOT NULL,
---   PRIMARY KEY (id),
+DROP TABLE IF EXISTS sheet;
+CREATE TABLE sheet (
+  id varchar(10) NOT NULL,
+  subject varchar(100) NOT NULL,
+  PRIMARY KEY (id),
   
---   CONSTRAINT sheet_ibfk_1 FOREIGN KEY (id) REFERENCES study_material (id)
---   ON UPDATE CASCADE
---   ON DELETE CASCADE 
+  CONSTRAINT sheet_ibfk_1 FOREIGN KEY (id) REFERENCES study_material (id)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE 
 
--- ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
--- LOCK TABLES sheet WRITE;
--- INSERT INTO sheet
--- VALUES
--- (
--- 	'S_PHY20',
--- 	'PHY'
--- ),(
--- 	'S_MATH14',
--- 	'MATH'
--- );
--- UNLOCK TABLES;
-
-
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+LOCK TABLES sheet WRITE;
+INSERT INTO sheet
+VALUES
+(
+	'S_PHY20',
+	'PHY'
+),(
+	'S_MATH14',
+	'MATH'
+);
+UNLOCK TABLES;
 
 
 DROP TABLE IF EXISTS staff_working_hours;
@@ -581,6 +514,7 @@ VALUES
 );
 
 UNLOCK TABLES;
+
 
 DROP TABLE IF EXISTS test_score;
 CREATE TABLE test_score (
@@ -615,5 +549,3 @@ VALUES
 	'88'
 );
 UNLOCK TABLES;
-
-
