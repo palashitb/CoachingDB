@@ -15,6 +15,8 @@ def option1():
     print("4. Online Lecture details")
     print("5. New Course")
     print("6. Student family details")
+    print("7. Study material given to a particular student")
+    print("8. New study material")
 
     ad = int(input("\nEnter Choice>  "))
     tmp = sp.call('clear', shell = True)
@@ -30,6 +32,10 @@ def option1():
         addCourse();
     if( ad == 6 ):
         addFamilyMembers();
+    if( ad == 7 ):
+        addReads();
+    if( ad == 8 ):
+        addStudyMaterial();
 
 
 def option2():
@@ -227,6 +233,53 @@ def addFamilyMembers():
 
     return
 
+def addReads():
+
+    try:
+        print("Enter the details about the study_material given to a student")
+        row = {}
+        row["rollno"] = input("Roll no of the student(format: +ve int): ")
+        row["study_material_id"] = input("ID of the study material given to the specified student(format: X_SUBJ00): ")
+
+        query = "INSERT INTO `reads`(rollno, study_material_id) VALUES('%s', '%s')" % (row["rollno"], row["study_material_id"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Inserted into database")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
+
+def addStudyMaterial():
+
+    try:
+
+        print("Enter the details of the new study material")
+        row = {}
+        row["id"] = input("ID of the study material(format: X_SUBJ00): ")
+        row["difficulty_level"] = input("Approximate difficulty level of the study material(Easy/Medium/Hard): ")
+
+        query = "INSERT INTO study_material(id, difficulty_level) VALUES('%s', '%s')" % (row["id"], row["difficulty_level"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Inserted into database")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
+
 
 def dispatch(ch):
     """
@@ -249,7 +302,6 @@ def dispatch(ch):
 while(1):
     tmp = sp.call('clear', shell=True)
     
-    # Can be skipped if you want to hard core username and password
     username = input("Username: ")
     password = input("Password: ")
 
@@ -273,7 +325,6 @@ while(1):
         with con.cursor() as cur:
             while(1):
                 tmp = sp.call('clear', shell=True)
-                # Here taking example of Employee Mini-world
                 print("1. Make a change to the database")  # Hire an Employee
                 print("2. Option 2")  # Fire an Employee
                 print("3. Option 3")  # Promote Employee
@@ -290,5 +341,4 @@ while(1):
     except:
         tmp = sp.call('clear', shell=True)
         print("Connection Refused: Either username or password is incorrect or user doesn't have access to database")
-        # print(username, password)
         tmp = input("Enter any key to CONTINUE>")
