@@ -14,6 +14,7 @@ def option1():
     print("3. Staff(employee)")
     print("4. Online Lecture details")
     print("5. New Course")
+    print("6. Student family details")
 
     ad = int(input("\nEnter Choice>  "))
     tmp = sp.call('clear', shell = True)
@@ -27,6 +28,8 @@ def option1():
         addOnlineLecture();
     if( ad == 5 ):
         addCourse();
+    if( ad == 6 ):
+        addFamilyMembers();
 
 
 def option2():
@@ -193,6 +196,37 @@ def addCourse():
         print(">>>>>>>>>>>>>", e)
 
     return
+
+def addFamilyMembers():
+
+    try:
+
+        row = {}
+        print("Enter Family member details")
+        row["name"] = input("Name of the Family member: ")
+        row["rollno"] = input("Roll number of the student related to the family memeber(format: positive integer): ")
+        row["phone_no"] = input("Phone no. of the family member: ")
+        row["address"] = input("Address of the member(expected to be same as student): ")
+
+        query = "INSERT INTO student_family_member_name(rollno, name, phone_no) VALUES('%s', '%s', '%s')" % (row["rollno"], row["name"], row["phone_no"])
+
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        query = "INSERT INTO student_family_address(student_rollno, address) VALUES('%s', '%s')" % (row["rollno"], row["address"])
+        cur.execute(query)
+        con.commit()
+        print(query)
+        print("Inserted into database")
+
+    except Exception as e:
+        con.rollback()
+        print("Failed to insert into database")
+        print(">>>>>>>>>>>>>", e)
+
+    return
+
 
 def dispatch(ch):
     """

@@ -486,7 +486,7 @@ CREATE TABLE student_family_member_name (
   rollno varchar(10) NOT NULL,
   name varchar(50) NOT NULL,
   phone_no varchar(15) NOT NULL,
-  PRIMARY KEY (rollno,phone_no),
+  PRIMARY KEY (rollno, phone_no),
 
   CONSTRAINT student_family_member_name_ibfk_1 FOREIGN KEY (rollno) REFERENCES students (rollno)
   ON UPDATE CASCADE
