@@ -390,6 +390,8 @@ def studentAdmission():
 
         print(query)
         cur.execute(query)
+        query = "UPDATE course SET num_of_students_enrolled = num_of_students_enrolled + 1 WHERE course_id = '%s'" % (row["course_id"])
+        cur.execute(query)
         con.commit()
 
         print("Inserted Into Database")
